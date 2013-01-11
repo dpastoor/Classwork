@@ -8,7 +8,10 @@ library(reshape2)
 library(lattice)
 library(grid)
 
+#xaxis data
 esize<-c(0,25,35,50,55,60,65,70,75,80,100)
+
+#power data
 power<-data.frame(xaxis = c(0,25,35,50,55,60,65,70,75,80,100),
                   t1=c(0.052,0.377,0.592,0.858,0.915,0.942,0.968,0.990,0.993,0.993,1),
                   s1=c(0.042,0.525,0.787,0.964,0.986,0.994,0.998,0.998,1,1,1),
@@ -21,35 +24,44 @@ power<-data.frame(xaxis = c(0,25,35,50,55,60,65,70,75,80,100),
 
 
 head(power)
-par(mfrow=c(1,1))
-matplot(esize,power[,1:8],cex=2.0,cex.lab=1.5,cex.axis=2.0,type="b",lty = c(1,1,2,2,3,3,4,4),
-        col=c(2,3,2,3,2,3,2,3),lwd=3.0,xlab="% Effect due to Clobazam",ylab="Power",pch=c(15,17,16,18,15,17,15,17),
-        xlim=c(0,100),ylim=c(0,1))
-legend(50,0.7, legend=(c("n=20/grp,t-test","n=20/grp,Model","n=30/grp,t-test","n=30/grp,Model","n=45/grp,t-test",
-                         "n=45/grp,Model","n=60/grp,t-test","n=60/grp,Model")),lty = c(1,1,2,2,3,3,4,4),col=c(2,3,2,3,2,3,2,3),
-       bty="n",cex=1.2,
-       lwd=2.5,pch=c(16,17,16,17,16,17,16,17))
-abline(h=0.9, lty=5, lwd=3.5)
 
+# ##Mathangi's Old Code for plotting power curves
+# par(mfrow=c(1,1))
+# matplot(esize,power[,1:8],cex=2.0,cex.lab=1.5,cex.axis=2.0,type="b",lty = c(1,1,2,2,3,3,4,4),
+#         col=c(2,3,2,3,2,3,2,3),lwd=3.0,xlab="% Effect due to Clobazam",ylab="Power",pch=c(15,17,16,18,15,17,15,17),
+#         xlim=c(0,100),ylim=c(0,1))
+# legend(50,0.7, legend=(c("n=20/grp,t-test","n=20/grp,Model","n=30/grp,t-test","n=30/grp,Model","n=45/grp,t-test",
+#                          "n=45/grp,Model","n=60/grp,t-test","n=60/grp,Model")),lty = c(1,1,2,2,3,3,4,4),col=c(2,3,2,3,2,3,2,3),
+#        bty="n",cex=1.2,
+#        lwd=2.5,pch=c(16,17,16,17,16,17,16,17))
+# abline(h=0.9, lty=5, lwd=3.5)
 
+#add x-axis data to dataframe
 power[0, ] <- esize
 
-x <- melt(power, id="xaxis", variable_name = "label")
-add <- rep(c("T", "S", "T", "S", "T", "S", "T", "S"), each = 11)
-head(x)
-x[,4] <- add
+
+
+
 
 y <- melt(power, id="xaxis", variable_name = "label")
-add <- rep(c("T", "S", "T", "S", "T", "S", "T", "S"), each = 11)
 
-y[,4] <- as.factor(add)
-add2 <- rep(c(seq(1,4)), each = 22)
-head(y)
-y[,5] <- as.factor(add2)
+#vector to distinguish whether T-test (T) or model (S)
+ts <- rep(c("T", "S", "T", "S", "T", "S", "T", "S"), each = 11)
+
+#vector to distinguish # per group
+### 1: n = 20/group
+### 2: n = 30/group
+### 3: n = 45/group
+### 4: n = 60/group
+grp <- rep(c(seq(1,4)), each = 22)
+
+
+y[,4] <- as.factor(ts)
+y[,5] <- as.factor(grp)
 head(y)
 
-#basic qplot
-qplot(xaxis, value, data = x, color = variable) + geom_line()
+#basic qplot to see overall shape
+qplot(xaxis, value, data = y, color = variable) + geom_line()
 
 p <- ggplot(data = x, aes(x = xaxis, y = value, color = V4, shape = V4, linetype = variable)) +
   geom_point(size = 5) +
