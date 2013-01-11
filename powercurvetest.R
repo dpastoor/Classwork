@@ -1,3 +1,11 @@
+#Author: devin.pastoor@gmail.com
+
+
+library(ggplot2)
+library(plyr)
+library(reshape2)
+library(lattice)
+library(grid)
 
 esize<-c(0,25,35,50,55,60,65,70,75,80,100)
 power<-data.frame(xaxis = c(0,25,35,50,55,60,65,70,75,80,100),
