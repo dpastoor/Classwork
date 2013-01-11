@@ -1,11 +1,11 @@
 #Author: Devin Pastoor
 #Email: devin.pastoor@gmail.com
+#code for data frame provided by Mathangi Gopalakrishnan
 
 
 library(ggplot2)
 library(plyr)
 library(reshape2)
-library(lattice)
 library(grid)
 
 #xaxis data
@@ -61,7 +61,6 @@ plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
                        labels = c("20/group", "30/group", "45/group", "60/group")) +
   scale_linetype_discrete(name = "Method", labels = c("t-test", "Model")) +
   scale_shape_discrete(name = "Method", labels = c("t-test", "Model")) +
-
   theme(legend.justification=c(1,0), legend.position=c(1,0)) + #legend placement on graph
   theme(legend.key.width= unit(2, "lines")) + #part of grid, controls width of lines in legend
 
@@ -76,6 +75,6 @@ plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
   theme(axis.text.y = element_text(size=20)) +
   theme(legend.title = element_text(size = 16)) +
   theme(legend.text = element_text(size = 14)) 
-#control   
-
+   
+plot
 
