@@ -22,27 +22,10 @@ power<-data.frame(xaxis = c(0,25,35,50,55,60,65,70,75,80,100),
                   t4=c(0.057,0.808,0.979,0.999,1,1,1,1,1,1,1),
                   s4=c(0.061,0.951,0.995,1,1,1,1,1,1,1,1))
 
-
 head(power)
-
-# ##Mathangi's Old Code for plotting power curves
-# par(mfrow=c(1,1))
-# matplot(esize,power[,1:8],cex=2.0,cex.lab=1.5,cex.axis=2.0,type="b",lty = c(1,1,2,2,3,3,4,4),
-#         col=c(2,3,2,3,2,3,2,3),lwd=3.0,xlab="% Effect due to Clobazam",ylab="Power",pch=c(15,17,16,18,15,17,15,17),
-#         xlim=c(0,100),ylim=c(0,1))
-# legend(50,0.7, legend=(c("n=20/grp,t-test","n=20/grp,Model","n=30/grp,t-test","n=30/grp,Model","n=45/grp,t-test",
-#                          "n=45/grp,Model","n=60/grp,t-test","n=60/grp,Model")),lty = c(1,1,2,2,3,3,4,4),col=c(2,3,2,3,2,3,2,3),
-#        bty="n",cex=1.2,
-#        lwd=2.5,pch=c(16,17,16,17,16,17,16,17))
-# abline(h=0.9, lty=5, lwd=3.5)
 
 #add x-axis data to dataframe
 power[0, ] <- esize
-
-
-
-
-
 y <- melt(power, id="xaxis", variable_name = "label")
 
 #vector to distinguish whether T-test (T) or model (S)
@@ -54,87 +37,19 @@ ts <- rep(c("T", "S", "T", "S", "T", "S", "T", "S"), each = 11)
 ### 3: n = 45/group
 ### 4: n = 60/group
 grp <- rep(c(seq(1,4)), each = 22)
-
-
 y[,4] <- as.factor(ts)
 y[,5] <- as.factor(grp)
+
 head(y)
 
 #basic qplot to see overall shape
 qplot(xaxis, value, data = y, color = variable) + geom_line()
 
-p <- ggplot(data = x, aes(x = xaxis, y = value, color = V4, shape = V4, linetype = variable)) +
-  geom_point(size = 5) +
-  geom_line(size = 1.2)
-p
-
-q <- ggplot(data = y, aes(x = xaxis, y = value, color = V5, shape = V4, linetype = V4)) +
-  geom_point(size = 5) +
-  geom_line(size = 1.2)
-q
-
-q <- ggplot(data = y, aes(x = xaxis, y = value)) +
-  geom_point(aes(shape = V4, color = V4), size = 5) +
-  geom_line(aes(group = variable, linetype = V4, color = V4), size = 1.2) +
-  geom_hline(aes(yintercept = 0.9), linetype="dashed") +
-  scale_color_discrete(name = "# per group",
-                       labels = c("20/group", "30/group", "45/group", "60/group")) +
-  scale_shape_discrete(name  ="Method",
-                       labels=c("T-Test", "Model")) +
-  theme(legend.title = element_text(size = 15)) 
-# theme(legend.justification=c(1,0), legend.position=c(1,0))
-
-q
-
-
-q <- ggplot(data = y, aes(x = xaxis, y = value, linetype = V4, shape = V4, color = V5 )) +
-  geom_point(size = 5) +
-  geom_line(size = 1.2) +
-  
-  labs(color = "# per group", shape = "Method", linetype = "Method")+   #if don't set linetype will separate to 3 legends
-  scale_color_discrete(name = "# per group",
-                       labels = c("20/group", "30/group", "45/group", "60/group")) +
-  scale_shape_discrete(name = "Method",
-                       labels = c("T-Test", "Model")) +
-  theme(legend.title = element_text(size = 15)) +
-  theme(legend.justification=c(1,0), legend.position=c(1,0)) +
-  geom_hline(aes(yintercept = 0.9), linetype="dashed") 
-q
-
-q <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
-  geom_point(aes(shape = V4), size = 5) +
-  geom_line(aes(group = variable, linetype = V4), size = 1.2) +
-  
-  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
-  
-  geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
-  scale_color_discrete(name = "# per group",
-                       labels = c("20/group", "30/group", "45/group", "60/group")) +
-  theme(legend.title = element_text(size = 15)) +
-  theme(legend.justification=c(1,0), legend.position=c(1,0)) 
-q
-
-ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
-  geom_point(aes(shape = V4), size = 5) +
-  geom_line(aes(group = variable, linetype = V4), size = 1.2) +
-  
-  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
-  
-  geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
-  scale_color_discrete(name = "# per group",
-                       labels = c("20/group", "30/group", "45/group", "60/group")) +
-  scale_linetype_discrete(name = "Method", labels = c("T-test", "Model")) +
-  scale_shape_discrete(name = "Method", labels = c("T-test", "Model")) +
-  theme(legend.title = element_text(size = 15)) +
-  theme(legend.justification=c(1,0), legend.position=c(1,0)) + 
-  theme(legend.key.width = unit(2, "lines")) #part of grid
-
+## Plot of power curves 
 plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
   geom_point(aes(shape = V4), size = 5) +
   geom_line(aes(group = variable, linetype = V4), size = 1.2) +
-  
   labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
-  
   geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
   scale_color_discrete(name = "# per group",
                        labels = c("20/group", "30/group", "45/group", "60/group")) +
@@ -142,7 +57,6 @@ plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
   scale_shape_discrete(name = "Method", labels = c("t-test", "Model")) +
   scale_x_continuous(name = "% Effect due to Clobazam") +
   scale_y_continuous(name = "Power") +
-  #theme(axis.title.x = element_text(% Effect due to Clobazam) +
   #to edit out grid lines
   #theme(panel.grid.minor=element_blank(), panel.grid.major=element_blank()) +
   theme(axis.title.x = element_text(size=20)) +
@@ -154,7 +68,3 @@ plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
   theme(legend.justification=c(1,0), legend.position=c(1,0)) + 
   theme(legend.key.width= unit(2, "lines")) #part of grid
 
-plot
-# messing with shortening
-ggplot(data = y, aes(xaxis, value, color = V5, linetype = V4)) +
-  geom_point(aes(shape = V4), size = 4) + geom_line(size = 1.2) + labs(color = "# per group", linetype = "test2", shape = "test")
