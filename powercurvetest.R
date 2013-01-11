@@ -11,7 +11,7 @@ library(grid)
 #xaxis data
 esize<-c(0,25,35,50,55,60,65,70,75,80,100)
 
-#power data
+#power data from Mathangi
 power<-data.frame(xaxis = c(0,25,35,50,55,60,65,70,75,80,100),
                   t1=c(0.052,0.377,0.592,0.858,0.915,0.942,0.968,0.990,0.993,0.993,1),
                   s1=c(0.042,0.525,0.787,0.964,0.986,0.994,0.998,0.998,1,1,1),
@@ -46,25 +46,36 @@ head(y)
 qplot(xaxis, value, data = y, color = variable) + geom_line()
 
 ## Plot of power curves 
+# ** V4 --> column in data from containing T/S
+# ** V5 --> column in dataframe containing 1,2,3,4
+
 plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
+#add points, lines, and abline
   geom_point(aes(shape = V4), size = 5) +
   geom_line(aes(group = variable, linetype = V4), size = 1.2) +
-  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
   geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
+
+#control how legend looks
+  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
   scale_color_discrete(name = "# per group",
                        labels = c("20/group", "30/group", "45/group", "60/group")) +
   scale_linetype_discrete(name = "Method", labels = c("t-test", "Model")) +
   scale_shape_discrete(name = "Method", labels = c("t-test", "Model")) +
+
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) + #legend placement on graph
+  theme(legend.key.width= unit(2, "lines")) + #part of grid, controls width of lines in legend
+
+#control how axis looks  
   scale_x_continuous(name = "% Effect due to Clobazam") +
   scale_y_continuous(name = "Power") +
-  #to edit out grid lines
-  #theme(panel.grid.minor=element_blank(), panel.grid.major=element_blank()) +
+    #to edit out grid lines
+    #theme(panel.grid.minor=element_blank(), panel.grid.major=element_blank()) +
   theme(axis.title.x = element_text(size=20)) +
   theme(axis.title.y = element_text(size=20)) +
   theme(axis.text.x = element_text(size=20)) +
   theme(axis.text.y = element_text(size=20)) +
   theme(legend.title = element_text(size = 16)) +
-  theme(legend.text = element_text(size = 14)) +
-  theme(legend.justification=c(1,0), legend.position=c(1,0)) + 
-  theme(legend.key.width= unit(2, "lines")) #part of grid
+  theme(legend.text = element_text(size = 14)) 
+#control   
+
 
