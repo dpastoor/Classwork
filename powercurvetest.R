@@ -31,3 +31,117 @@ legend(50,0.7, legend=(c("n=20/grp,t-test","n=20/grp,Model","n=30/grp,t-test","n
 abline(h=0.9, lty=5, lwd=3.5)
 
 
+power[0, ] <- esize
+
+x <- melt(power, id="xaxis", variable_name = "label")
+add <- rep(c("T", "S", "T", "S", "T", "S", "T", "S"), each = 11)
+head(x)
+x[,4] <- add
+
+y <- melt(power, id="xaxis", variable_name = "label")
+add <- rep(c("T", "S", "T", "S", "T", "S", "T", "S"), each = 11)
+
+y[,4] <- as.factor(add)
+add2 <- rep(c(seq(1,4)), each = 22)
+head(y)
+y[,5] <- as.factor(add2)
+head(y)
+
+#basic qplot
+qplot(xaxis, value, data = x, color = variable) + geom_line()
+
+p <- ggplot(data = x, aes(x = xaxis, y = value, color = V4, shape = V4, linetype = variable)) +
+  geom_point(size = 5) +
+  geom_line(size = 1.2)
+p
+
+q <- ggplot(data = y, aes(x = xaxis, y = value, color = V5, shape = V4, linetype = V4)) +
+  geom_point(size = 5) +
+  geom_line(size = 1.2)
+q
+
+q <- ggplot(data = y, aes(x = xaxis, y = value)) +
+  geom_point(aes(shape = V4, color = V4), size = 5) +
+  geom_line(aes(group = variable, linetype = V4, color = V4), size = 1.2) +
+  geom_hline(aes(yintercept = 0.9), linetype="dashed") +
+  scale_color_discrete(name = "# per group",
+                       labels = c("20/group", "30/group", "45/group", "60/group")) +
+  scale_shape_discrete(name  ="Method",
+                       labels=c("T-Test", "Model")) +
+  theme(legend.title = element_text(size = 15)) 
+# theme(legend.justification=c(1,0), legend.position=c(1,0))
+
+q
+
+
+q <- ggplot(data = y, aes(x = xaxis, y = value, linetype = V4, shape = V4, color = V5 )) +
+  geom_point(size = 5) +
+  geom_line(size = 1.2) +
+  
+  labs(color = "# per group", shape = "Method", linetype = "Method")+   #if don't set linetype will separate to 3 legends
+  scale_color_discrete(name = "# per group",
+                       labels = c("20/group", "30/group", "45/group", "60/group")) +
+  scale_shape_discrete(name = "Method",
+                       labels = c("T-Test", "Model")) +
+  theme(legend.title = element_text(size = 15)) +
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) +
+  geom_hline(aes(yintercept = 0.9), linetype="dashed") 
+q
+
+q <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
+  geom_point(aes(shape = V4), size = 5) +
+  geom_line(aes(group = variable, linetype = V4), size = 1.2) +
+  
+  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
+  
+  geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
+  scale_color_discrete(name = "# per group",
+                       labels = c("20/group", "30/group", "45/group", "60/group")) +
+  theme(legend.title = element_text(size = 15)) +
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) 
+q
+
+ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
+  geom_point(aes(shape = V4), size = 5) +
+  geom_line(aes(group = variable, linetype = V4), size = 1.2) +
+  
+  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
+  
+  geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
+  scale_color_discrete(name = "# per group",
+                       labels = c("20/group", "30/group", "45/group", "60/group")) +
+  scale_linetype_discrete(name = "Method", labels = c("T-test", "Model")) +
+  scale_shape_discrete(name = "Method", labels = c("T-test", "Model")) +
+  theme(legend.title = element_text(size = 15)) +
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) + 
+  theme(legend.key.width = unit(2, "lines")) #part of grid
+
+plot <- ggplot(data = y, aes(x = xaxis, y = value, color = V5)) +
+  geom_point(aes(shape = V4), size = 5) +
+  geom_line(aes(group = variable, linetype = V4), size = 1.2) +
+  
+  labs(color = "# per group", shape = "Method", linetype = "Method") +    #if don't set linetype to same name will separate to 3 legends
+  
+  geom_hline(aes(yintercept = 0.9), linetype="dashed", size = 1.05) +
+  scale_color_discrete(name = "# per group",
+                       labels = c("20/group", "30/group", "45/group", "60/group")) +
+  scale_linetype_discrete(name = "Method", labels = c("t-test", "Model")) +
+  scale_shape_discrete(name = "Method", labels = c("t-test", "Model")) +
+  scale_x_continuous(name = "% Effect due to Clobazam") +
+  scale_y_continuous(name = "Power") +
+  #theme(axis.title.x = element_text(% Effect due to Clobazam) +
+  #to edit out grid lines
+  #theme(panel.grid.minor=element_blank(), panel.grid.major=element_blank()) +
+  theme(axis.title.x = element_text(size=20)) +
+  theme(axis.title.y = element_text(size=20)) +
+  theme(axis.text.x = element_text(size=20)) +
+  theme(axis.text.y = element_text(size=20)) +
+  theme(legend.title = element_text(size = 16)) +
+  theme(legend.text = element_text(size = 14)) +
+  theme(legend.justification=c(1,0), legend.position=c(1,0)) + 
+  theme(legend.key.width= unit(2, "lines")) #part of grid
+
+plot
+# messing with shortening
+ggplot(data = y, aes(xaxis, value, color = V5, linetype = V4)) +
+  geom_point(aes(shape = V4), size = 4) + geom_line(size = 1.2) + labs(color = "# per group", linetype = "test2", shape = "test")
