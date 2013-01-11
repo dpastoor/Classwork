@@ -1,4 +1,5 @@
-#Author: devin.pastoor@gmail.com
+#Author: Devin Pastoor
+#Email: devin.pastoor@gmail.com
 
 
 library(ggplot2)
