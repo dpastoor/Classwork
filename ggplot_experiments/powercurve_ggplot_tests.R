@@ -2,6 +2,7 @@
 #email: devin.pastoor@gmail.com
 # testing various ggplot settings
 
+setwd("C:/Users/Devin/Documents/Classwork/ggplot_experiments")
 library(ggplot2)
 library(plyr)
 library(reshape2)
