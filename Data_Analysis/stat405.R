@@ -2,10 +2,8 @@
 # Code for Hadley Wickham's Stat 405: Statistical Computing and Data Analysis
 # Associated pdf's and other files in Data Analysis Onenote Notebook
 
-getwd()
 
-#Reminder:
-#setwd("C:/Users/Devin Pastoor/Documents/Classwork/Data_Analysis")
+setwd("C:/Users/Devin Pastoor/Documents/Classwork/Data_Analysis")
 rm(list = ls())                # clean out workspace
 
 
@@ -70,4 +68,59 @@ qplot(reorder(class,hwy), hwy, data = mpg, geom = "boxplot")
 # can add additional layers
 qplot(reorder(class,hwy), hwy, data = mpg, geom = c("jitter", "boxplot")) # boxplot on top
 qplot(reorder(class,hwy), hwy, data = mpg, geom = c("boxplot", "jitter")) # jitter on top
+
+
+# Lecture 2 - Displaying Distributions -----------------------------------------
+
+# Given one variable, qplot will give a bar chart or histogram
+qplot(cut, data = diamonds)
+qplot(carat, data = diamonds)
+
+# Can easily change bin height
+qplot(carat, data = diamonds, binwidth = 1)
+qplot(carat, data = diamonds, binwidth = 0.1)
+qplot(carat, data = diamonds, binwidth = 0.01)
+resolution(diamonds$carat)                       #can see the last set bin width
+
+# Change axis width of previous plot
+last_plot() + xlim(0,3)
+
+qplot(table, data = diamonds, binwidth = 1)
+
+#to zoom in on a plot region or set axes use xlim() and ylim()
+qplot(table, data = diamonds, binwidth = 1) + xlim(50, 70)
+qplot(table, data = diamonds, binwidth = 0.1) + xlim(50, 70)
+qplot(carat, data = diamonds, binwidth = 0.1) + xlim(50, 70) + ylim(0, 50)
+?coord_cartesian()
+
+#additional aesthetics options (for pretty but ineffective plots)
+qplot(depth, data = diamonds, binwidth = 0.2)
+#adding a fill color
+qplot(depth, data = diamonds, binwidth = 0.2, fill = cut) + xlim(55, 70)
+qplot(depth, data = diamonds, binwidth = 0.2) + xlim(55, 70) + facet_wrap(~ cut)
+
+#some problems
+#stacking is hard to read, placing apart makes hard to compare
+#relative abudance is hard to judge - just rescale to equal area
+
+#large distances make comparisons hard
+qplot(price, data = diamonds, binwidth = 500) + facet_wrap(~ cut)
+
+#stacked heights hard to compare
+qplot(price, data = diamonds, binwidth = 500, fill = cut)
+
+#better, but still have differing relative abundances
+qplot(price, data = diamonds, binwidth = 500, geom = "freqpoly", color = cut)
+
+#Instead of count on y-axis, display density
+# .. indicates that the variable isn't in original data
+qplot(price, ..density.., data = diamonds, binwidth = 500, geom = "freqpoly",
+      color = cut)
+
+#to use with histogram you must be explicit
+qplot(price, ..density.., data = diamonds, binwidth = 500, geom = "histogram") +
+  facet_wrap(~ cut)
+
+
+
 
