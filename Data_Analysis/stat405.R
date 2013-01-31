@@ -6,12 +6,14 @@
 setwd("C:/Users/Devin Pastoor/Documents/Classwork/Data_Analysis")
 rm(list = ls())                # clean out workspace
 
+library(ggplot2)
+library(plyr)
 
 # Lecture 1 - Introduction -----------------------------------------------------
   
 # Scatterplot basics
 
-library("ggplot2")
+
 
 # find out information about set of data
 ?mpg
@@ -121,6 +123,33 @@ qplot(price, ..density.., data = diamonds, binwidth = 500, geom = "freqpoly",
 qplot(price, ..density.., data = diamonds, binwidth = 500, geom = "histogram") +
   facet_wrap(~ cut)
 
+#lecture 3 - Graphical Extensions and Subsetting -------------------------------
+# reading scatter plots - look for 3 things:
+#     - global patterns
+#     - local patterns
+#     - deviations
 
+# to get help with specific geom - eg: ?geom_smooth
+
+# To set aesthetics to a particular value, you need to wrap the value in I()
+qplot(price, carat, data = diamonds, color = "blue")
+qplot(price, carat, data = diamonds, color = I("blue"))
+
+# You can also vary alpha for visibility preferences 
+qplot(price, carat, data = diamonds, alpha = I(1/10))
+qplot(price, carat, data = diamonds, alpha = I(1/50))
+qplot(price, carat, data = diamonds, alpha = I(1/100))
+qplot(price, carat, data = diamonds, alpha = I(1/250))
+
+qplot(table, price, data = diamonds)
+qplot(table, price, data = diamonds, geom = "boxplot")
+
+# can specify a grouping variable to determine which observations go to 
+# which boxplot
+
+#round_any requires plyr  
+qplot(table, price, data = diamonds, geom = "boxplot", group = round_any(table, 1))
+qplot(table, price, data = diamonds, geom = "boxplot", 
+      group = round_any(table, 1)) + xlim(50, 70)
 
 
